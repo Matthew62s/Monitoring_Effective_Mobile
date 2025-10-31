@@ -7,6 +7,25 @@ MONITORING_URL="https://test.com/monitoring/test/api"
 LOG_FILE="/var/log/monitoring.log"
 STATE_FILE="/var/run/monitor-test.state"
 
+
+init_logging() {
+    	local log_dir
+    	log_dir=$(dirname "$LOG_FILE")
+    	if [[ ! -d "$log_dir" ]]; then
+        	mkdir -p "$log_dir"
+        	chmod 755 "$log_dir"
+    	fi
+    	if [[ ! -f "$LOG_FILE" ]]; then
+        	touch "$LOG_FILE"
+        	chmod 644 "$LOG_FILE"
+    	fi
+    	if [[ ! -w "$LOG_FILE" ]]; then
+        	echo "CRITICAL: Cannot write to log file: $LOG_FILE" >&2
+        	exit 1
+    	fi
+}
+
+
 curl_error_msg() {
     	local code=$1
     	case $code in
@@ -35,6 +54,7 @@ get_pid() {
 }
 
 main() {
+	init_logging
     	local prev_pid="" prev_time=""
     	if [ -f "$STATE_FILE" ]; then
         	read -r prev_pid prev_time < "$STATE_FILE" || true
