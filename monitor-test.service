@@ -6,3 +6,8 @@ Wants=network-online.target
 [Service]
 Type=oneshot
 ExecStart=/usr/local/bin/monitor-test.sh
+#Только для тестового задания
+User=root
+
+[Install]
+WantedBy=multi-user.target
