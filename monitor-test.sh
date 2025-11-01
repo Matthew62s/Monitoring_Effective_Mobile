@@ -70,6 +70,7 @@ main() {
         	fi
 
 		local http_code="000"
+		local rc=0
         	http_code=$(curl -s -o /dev/null --connect-timeout 7 \
 			--max-time 15\
                 	-w "%{http_code}" \
