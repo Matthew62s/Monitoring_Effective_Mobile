@@ -2,12 +2,21 @@
 Description=Monitor process "test" and notify monitoring server
 After=network-online.target
 Wants=network-online.target
+StartLimitIntervalSec=300
+StartLimitBurst=5
 
 [Service]
 Type=oneshot
 ExecStart=/usr/local/bin/monitor-test.sh
-#Только для тестового задания
-User=root
+User=monitor
+Group=monitor
+StandardOutput=journal
+StandardError=journal
+TimeoutSec=60
+Restart=on-failure
+RestartSec=10
+NoNewPrivileges=true
+PrivateTmp=true
 
 [Install]
 WantedBy=multi-user.target
